@@ -1,0 +1,7 @@
+!.gitkeep
+*~
+*.pyc
+
+bike/settings.py
+media/
+static/

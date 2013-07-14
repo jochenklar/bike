@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}leaflet/leaflet.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}leaflet/leaflet.js" ></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jquery.flot.min.js" ></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}map.js" ></script>
+    <script type="text/javascript"> 
+    $(document).ready(function() {setTimeout("init('foo');", 100);});
+    </script>
+{% endblock %}
+
+{% block navbar %}
+<ul class="nav">
+    {% for y,t in tracks.items %}
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            {{y}} <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            {% for track in t %}
+                <li>
+                    <a class="load-track" href="#{{track.id}}">
+                        {{track.name}} - {{track.timestamp}}
+                    </a>
+                </li>        
+            {% endfor %}
+        </ul>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block content %}
+    <div id="map"></div>
+    <div id="info" class="box"></div>
+    <div id="meta" class="box"></div>
+    <div id="track" class="box">
+        <div id="#canvas"></div>
+    </div>
+{% endblock %}
