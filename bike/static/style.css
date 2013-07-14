@@ -1,0 +1,110 @@
+@font-face {
+    font-family: DroidSans;
+    src: url('font/DroidSans.ttf');
+}
+@font-face {
+    font-family: DroidSans;
+    src: url('font/DroidSans-Bold.ttf');
+    font-weight: bold;
+}
+html, body {
+    padding: 0;
+    margin: 0;
+    font-family: DroidSans;
+}
+
+#content {
+    position: absolute;
+    top: 40px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 10;
+    background-image: url(/static/img/shinedotted.png);
+}
+
+#map {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 100;
+}
+
+#meta {
+    position: absolute;
+    bottom: 66px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#track {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    height: 160px;
+    width: 500px;
+    z-index: 1000;
+
+    padding-top: 10px;
+}
+
+#info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    z-index: 1000;
+}
+
+#info :last-child {
+    margin-bottom: 0;
+}
+
+#meta, #track, #info {
+    display: none;
+}
+
+.box {
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 5px 10px;
+}
+
+.page {
+    margin-top: 40px;
+    padding: 20px 0 10px 0;
+    border: 1px solid silver;
+    border-radius: 7px;
+    background: white;
+}
+
+.navbar-fixed-top .navbar-inner {
+    padding-left: 20px;
+    padding-right: 5px;
+}
+
+.leaflet-left .leaflet-control {
+    margin-left: 20px;
+}
+.leaflet-top .leaflet-control {
+    margin-top: 20px;
+}
+.leaflet-container .leaflet-control-attribution {
+    margin-right: 20px;
+    margin-bottom: 20px;
+
+    border: 1px solid #d4d4d4;
+    background-color: white;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 5px 10px;
+
+}
+.leaflet-bar {
+    border: 1px solid #d4d4d4;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+}
