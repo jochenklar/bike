@@ -2,12 +2,22 @@ var current = {};
 var leafletMap;
 
 function displaymap() {
-    var url = 'http://tiles.jochenklar.de/bbs/{z}/{x}/{y}.png';
+
+    var url = 'http://tiles.jochenklar.de/tiles/bbs/germany/{z}/{x}/{y}.png';
     var opt = {
         'attribution': 'Map data © 2012 OpenStreetMap contributors | Style by <a href="http://buergerbautstadt.de" target="blank">buergerbautstadt.de</a>',
-        'maxZoom': 18,
-        'minZoom': 10
+        'maxZoom': 14,
+        'minZoom': 6
     }
+
+
+//    var url = 'http://tile.opencyclemap.org/cycle/{z}/{x}/{y}.png';    
+//    var url = 'http://tile.thunderforest.com/outdoors/{z}/{x}/{y}.png';
+//    var opt = {
+//        'attribution': 'Map data © 2012 OpenStreetMap contributors | Tiles by <a href="http://thunderforest.com" target="blank">Thunderforest</a>',
+//        'maxZoom': 18,
+//        'minZoom': 6
+//    }
 
     leafletMap = L.map('map').setView([52.51, 13.37628], 10);
     L.tileLayer(url, opt).addTo(leafletMap);
@@ -89,7 +99,8 @@ function displaytrack(id) {
             // display track in map
             current.track = L.geoJson(json.track, {
                 style : {
-                    "color": '#0078A8',
+                    //"color": '#0078A8',
+                    "color": 'red',
                     "weight": 3,
                     "opacity": 0.75
                 }
