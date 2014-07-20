@@ -5,7 +5,7 @@ from tracks.models import Track
 
 def index(request):
     # get tracks
-    years = range(2009,2014)
+    years = range(2009,2015)
     tracks = {}
     for year in years:  
         tracks[year] = Track.objects.filter(timestamp__year=year).order_by('timestamp')

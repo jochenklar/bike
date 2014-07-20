@@ -25,18 +25,12 @@ function displaymap() {
 
 function displaytrack(id) {
     $.ajax({
-        type: 'GET',
         url: '/tracks/' + id,
         dataType: 'json',
-        headers: {
-            Accept: 'application/json'
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
-        },
         success: function (json) {
+            // get metadata
+            var meta = json.properties;
+
             if (!$.isEmptyObject(current)) {
                 leafletMap.removeLayer(current.track);
                 current.meta.remove();
@@ -45,12 +39,9 @@ function displaytrack(id) {
 
             // build info box
             current.info = $('<p/>',{
-                'html': json.name + ' - ' + json.timestamp
+                'html': meta.name + ' - ' + meta.timestamp
             }).appendTo($('#info'))
             $('#info').show();
-
-            // get metadata
-            var meta = json.track.properties;
 
             // convert units
             var h = Math.floor(meta.time/3600);
@@ -74,9 +65,10 @@ function displaytrack(id) {
                 'html': html
             }).appendTo($('#meta'))
             $('#meta').show();
-            
+
+            /*            
             // get tackpoint array
-            tp = json.track.geometry.coordinates[0]
+            tp = track.geometry.coordinates[0]
 
             // build track box
             var data = [];
@@ -95,12 +87,13 @@ function displaytrack(id) {
             };
             var plot = $.plot('#track', [series], plotoptions);
             $('#track').show();
+            */
 
             // display track in map
-            current.track = L.geoJson(json.track, {
+            current.track = L.geoJson(json, {
                 style : {
-                    //"color": '#0078A8',
-                    "color": 'red',
+                    "color": '#0078A8',
+                    //"color": 'red',
                     "weight": 3,
                     "opacity": 0.75
                 }

@@ -2,8 +2,8 @@ from django.db import models
 from django.forms.models import model_to_dict
 from django.conf import settings
 
-import json
-import xml.etree.ElementTree as et
+import os,json,re,zipfile
+from lxml import etree
 
 class Track(models.Model):
     name      = models.CharField(max_length=256, blank=True)
@@ -19,26 +19,37 @@ class Track(models.Model):
 
     def save(self, *args, **kwargs):
         # extract the content of the new file
-        tcx = TCX()
-        tcx.parse(self.trackfile.read())
+        if self.trackfile.url.endswith('kmz'):
+            parser = KML()
+            zf = zipfile.ZipFile(self.trackfile)
+            zf.extract('doc.kml',settings.MEDIA_ROOT + os.sep + 'trackfiles')
+            parser.parse(open('doc.kml').read())
+        elif self.trackfile.url.endswith('kml'):
+            parser = KML()
+            parser.parse(self.trackfile.read())
+        elif self.trackfile.url.endswith('tcx'): 
+            parser = TCX()
+            parser.parse(self.trackfile.read())
+        else:
+            raise Exception('Unknown format')
 
-        self.timestamp = tcx.timestamp
+        self.timestamp = parser.meta['timestamp']
         self.geoJson   = json.dumps({
             "type": "Feature",
             "geometry": { 
                 "type": "MultiLineString",
-                "coordinates": [tcx.track]
+                "coordinates": [parser.track]
             },
-            'properties': tcx.meta
+            'properties': parser.meta
         })
 
         # save object
         super(Track, self).save(*args, **kwargs)
     
-class TCX():
-    def parse(self, tcxString):
-        ns = '{http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2}' 
-
+class KML():
+    def parse(self, kmlString):
+        # init stuff
+        self.track = []
         self.meta = {
             'time': 0.0,
             'dist': 0.0,
@@ -47,14 +58,63 @@ class TCX():
             'speed': 0.0
         }
 
+        # parse xml
+        root = etree.fromstring(kmlString)
+        ns = '{%s}' % root.nsmap[None]
+        gx = '{%s}' % root.nsmap['gx']
+
+        # get Placamark nodes
+        documentnode = root.find(ns + 'Document')
+        placemarknodes = documentnode.findall(ns + 'Placemark')
+
+        for placemarknode in placemarknodes:
+            if 'id' in placemarknode.attrib and placemarknode.attrib['id'] == 'tour':
+                # this is the 'tour' node
+                multiTrackNode = placemarknode.find(gx + 'MultiTrack')
+                trackNodes = multiTrackNode.findall(gx + 'Track')
+                for trackNode in trackNodes:
+                    whenNodes  = trackNode.findall(ns + 'when')
+                    coordNodes = trackNode.findall(gx + 'coord')
+
+                    if len(whenNodes) != len(coordNodes):
+                        raise Exception('len(whenNodes) != len(coordNodes)')
+                    
+                    for whenNode,coordNode in zip(whenNodes,coordNodes):
+                        # lon,lat,alt
+                        self.track.append(coordNode.text.split())
+
+            else:
+                # get styleUrl
+                styleUrlNode = placemarknode.find(ns + 'styleUrl')
+
+                if styleUrlNode.text == '#start':
+                    # this is the 'start' node
+                    timeStampNode = placemarknode.find(ns + 'TimeStamp')
+                    self.meta['timestamp'] = timeStampNode.find(ns + 'when').text
+
+                elif styleUrlNode.text == '#end':
+                    # this is the 'end' node
+                    print 'end'
+
+class TCX():
+    def parse(self, tcxString):
+        # init stuff
         self.track = []
+        self.meta = {
+            'time': 0.0,
+            'dist': 0.0,
+            'cal': 0,
+            'cad': 0,
+            'speed': 0.0
+        }
 
-        # aggregate tcx string
-        tcx = et.fromstring(tcxString)
+        # parse xml
+        root = etree.fromstring(tcxString)
+        ns = '{%s}' % root.nsmap[None]
 
-        activitynode = tcx.find(ns + 'Activities').find(ns + 'Activity')
-        self.timestamp = activitynode.find(ns + 'Id').text
-
+        # get nodes
+        activitynode = root.find(ns + 'Activities').find(ns + 'Activity')
+        self.meta['timestamp'] = activitynode.find(ns + 'Id').text
 
         # loop over loops and extract data
         lapnodes = activitynode.findall(ns + 'Lap')
@@ -109,3 +169,5 @@ class TCX():
                     if tp['lat'] and tp['lon']:            
                         self.track.append([tp[key] \
                             for key in ['lon','lat','dist','alt','cad']]) 
+
+

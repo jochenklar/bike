@@ -4,26 +4,39 @@
         <title>bike.jochenklar.de</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <script type="text/javascript" src="{{ STATIC_URL }}jquery.min.js" ></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.js" ></script>
-        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" >
-        {% block head %}{% endblock %}
+        
+        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" >
+        {% block css %}{% endblock %}
         <link rel="stylesheet" href="{{ STATIC_URL }}style.css" />
     </head>
 
     <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <a class="brand" href="/">bike.jochenklar.de</a></li>
-                {% block navbar %}{% endblock %}
-                <ul class="nav pull-right">
-                    <li><a href="/admin">Admin</a></li>
-                </ul>   
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">bike.jochenklar.de</a>
             </div>
-        </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    {% block navbar %}{% endblock %}
+                </ul>
+                <ul class="nav navbar-nav pull-right">
+                    <li><a href="/admin">Admin</a></li>
+                </ul> 
+            </div>
+        </nav>
 
         <div id="content">
             {% block content %}{% endblock %}
         </div>  
+
+        <script type="text/javascript" src="{{ STATIC_URL }}jquery.min.js" ></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js" ></script>
+        {% block js %}{% endblock %}
     </body>
 </html>
