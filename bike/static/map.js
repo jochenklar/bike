@@ -21,7 +21,7 @@ function displayMap() {
         'attribution': 'Map data © 2012 OpenStreetMap contributors | Style by <a href="http://buergerbautstadt.de" target="blank">buergerbautstadt.de</a>',
         'maxZoom': 14,
         'minZoom': 6
-    }
+    };
 
     _leafletMap = L.map('map').setView([52.51, 13.37628], 12);
     L.tileLayer(url, opt).addTo(_leafletMap);
@@ -81,7 +81,7 @@ function displayProperties(properties) {
         'speed': Math.round(properties.speed  * 1.609344 * 100) / 100
     });
 
-    $('#properties').empty().append(html); 
+    $('#properties').empty().append(html);
 }
 
 function displayProfiles(trackpoints) {
@@ -89,7 +89,7 @@ function displayProfiles(trackpoints) {
 
     var html = template();
 
-    $('#profiles').append(html);
+    $('#profiles').empty().append(html);
 
     var m = [20, 80, 20, 80]; // margins
     var w = 800 - m[1] - m[3]; // width
@@ -97,17 +97,17 @@ function displayProfiles(trackpoints) {
 
     trackpoints_t = d3.transpose(trackpoints);
 
-    var x = d3.scale.linear().domain([d3.min(trackpoints_t[2]), d3.max(trackpoints_t[2])]).range([0, w]);
+    var x  = d3.scale.linear().domain([d3.min(trackpoints_t[2]), d3.max(trackpoints_t[2])]).range([0, w]);
     var y1 = d3.scale.linear().domain([d3.min(trackpoints_t[3]), d3.max(trackpoints_t[3])]).range([h, 0]);
     var y2 = d3.scale.linear().domain([d3.min(trackpoints_t[4]), d3.max(trackpoints_t[4])]).range([h, 0]);
 
     var line1 = d3.svg.line()
-        .x(function(d) {return x(d[2])})
-        .y(function(d) {return y1(d[3])});
+        .x(function(d) {return x(d[2]);})
+        .y(function(d) {return y1(d[3]);});
 
     var line2 = d3.svg.line()
-        .x(function(d) {return x(d[2])})
-        .y(function(d) {return y2(d[4])});
+        .x(function(d) {return x(d[2]);})
+        .y(function(d) {return y2(d[4]);});
 
     var graph = d3.select("#profiles-canvas").append("svg:svg")
         .attr("width", w + m[1] + m[3])
