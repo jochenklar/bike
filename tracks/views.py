@@ -21,4 +21,4 @@ def tracks(request):
 
 def track(request, pk):
     track = get_object_or_404(Track, pk=pk)
-    return HttpResponse(track.geojson.geojson, content_type="application/json")
+    return HttpResponse(track.fetchGeojson(), content_type="application/json")
