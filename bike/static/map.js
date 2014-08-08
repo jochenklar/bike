@@ -23,7 +23,7 @@ function displayMap() {
         'minZoom': 6
     }
 
-    _leafletMap = L.map('map').setView([52.51, 13.37628], 10);
+    _leafletMap = L.map('map').setView([52.51, 13.37628], 12);
     L.tileLayer(url, opt).addTo(_leafletMap);
 }
 
@@ -62,6 +62,8 @@ function displayTrack(id) {
                     "opacity": 0.75
                 }
             }).addTo(_leafletMap);
+
+            _leafletMap.panTo(new L.LatLng(json.geometry.coordinates[0][0][1],json.geometry.coordinates[0][0][0]));
         }
     });
 }
