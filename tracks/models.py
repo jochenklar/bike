@@ -33,10 +33,12 @@ class Track(models.Model):
         timestamp,geojson = parser.parse()
 
         if not self.geojson_id:
-            self.geojson = GeoJson(pk=self.pk,geojson=geojson)
+            geojson = GeoJson(pk=self.pk,geojson=geojson)
+            geojson.save()
+            self.geojson = geojson
         else:
             self.geojson.geojson = geojson
-        self.geojson.save()
+            self.geojson.save()
 
         # save track object
         self.timestamp = timestamp
