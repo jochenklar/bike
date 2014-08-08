@@ -1,8 +1,4 @@
-from django.db import models
-from django.forms.models import model_to_dict
-from django.conf import settings
-
-import os,json,re,zipfile,tempfile
+import os,json,zipfile
 from lxml import etree
 
 class Parser():

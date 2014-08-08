@@ -2,8 +2,6 @@ from django.db import models
 
 from tracks.lib import Parser
 
-import os,json
-
 class Track(models.Model):
     name      = models.CharField(max_length=256, blank=True)
     track     = models.FileField(upload_to='tracks')

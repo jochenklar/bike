@@ -1,13 +1,7 @@
 import json
-from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from django.shortcuts import render,redirect,render_to_response,get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.db import models
-from django.views.generic import View
-from django.core import serializers
-from django.utils import formats
+
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 
 from tracks.models import Track
 
