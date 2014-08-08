@@ -8,6 +8,7 @@ class Track(models.Model):
     name      = models.CharField(max_length=256, blank=True)
     track     = models.FileField(upload_to='tracks')
     timestamp = models.DateTimeField()
+    geojson   = models.ForeignKey('GeoJson')
     
     def __unicode__(self):
         if self.name != '':
@@ -18,20 +19,19 @@ class Track(models.Model):
     def save(self, *args, **kwargs):
         # extract the content of the new file
         parser = Parser(self.track)
-        timestamp, geojson = parser.parse()
+        timestamp,geojson = parser.parse()
+
+        # create geojson object
+        if not self.geojson_id:
+            geojson = GeoJson(geojson=geojson)
+            geojson.save()
+        else:
+            geojson = GeoJson(geojson=geojson)
 
         # save track object
         self.timestamp = timestamp
+        self.geojson = geojson
         super(Track, self).save(*args, **kwargs)
 
-        # save geojson object
-        try:
-            g = GeoJson.objects.get(pk=self.pk)
-            g.geojson = geojson
-            g.save()
-        except GeoJson.DoesNotExist:
-            GeoJson(track=self,geojson=geojson).save()
-
 class GeoJson(models.Model):
-    track   = models.ForeignKey('Track')
     geojson = models.TextField()
