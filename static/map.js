@@ -52,7 +52,7 @@ function displayTrack(id) {
                 style : {
                     "color": _track_color,
                     "weight": 5,
-                    "opacity": 0.5
+                    "opacity": 0.75
                 }
             }).addTo(_leafletMap);
 
