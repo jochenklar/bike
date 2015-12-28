@@ -3,5 +3,7 @@
 *.pyc
 
 /bike/settings.py
-/media/
-/static/
+/media_root/
+/static_root/
+
+env
