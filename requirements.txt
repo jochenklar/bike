@@ -1,0 +1,4 @@
+Django==1.9
+gpxpy
+lxml
+psycopg2

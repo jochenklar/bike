@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include 'base_head.html' %}
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+<!-- navigation -->
+{% include 'base_navigation.html' %}
+<!-- end navigation -->
+
+<!-- content -->
+{% block content %}{% endblock %}
+<!-- end content -->
+
+</body>
+</html>
