@@ -1,5 +1,10 @@
-import os,json,zipfile
+import os
+import json
+import zipfile
+import gpxpy
+
 from lxml import etree
+
 
 class Parser():
 
@@ -13,6 +18,8 @@ class Parser():
             self._parser = KML(track)
         elif suffix == '.kmz':
             self._parser = KMZ(track)
+        elif suffix == '.gpx':
+            self._parser = GPX(track)
         else:
             raise Exception('Unknown format')
 
@@ -179,3 +186,76 @@ class KMZ():
 
         kmlparser = KML(f)
         return kmlparser.parse()
+
+class GPX():
+    def __init__(self, track):
+        self.track = track
+
+    def parse(self):
+        # read file
+        string = self.track.read()
+
+        # init stuff
+        trackpoints = []
+        properties = {
+            'time': 0.0,
+            'dist': 0.0,
+            'cal': 0,
+            'cad': 0,
+            'speed': 0.0
+        }
+
+        print self.track
+
+        gpx = gpxpy.parse(string)
+
+        print gpx
+
+        for track in gpx.tracks:
+            for segment in track.segments:
+                for point in segment.points:
+                    trackpoints.append([point.latitude, point.longitude, None, point.elevation])
+
+        print(trackpoints)
+
+        '''
+        # parse xml
+        root = etree.fromstring(string)
+        ns = '{%s}' % root.nsmap[None]
+        gx = '{%s}' % root.nsmap['gx']
+
+        # get Placamark nodes
+        documentnode = root.find(ns + 'Document')
+        placemarknodes = documentnode.findall(ns + 'Placemark')
+
+        for placemarknode in placemarknodes:
+            if 'id' in placemarknode.attrib and placemarknode.attrib['id'] == 'tour':
+                # this is the 'tour' node
+                multiTrackNode = placemarknode.find(gx + 'MultiTrack')
+                trackNodes = multiTrackNode.findall(gx + 'Track')
+                for trackNode in trackNodes:
+                    whenNodes  = trackNode.findall(ns + 'when')
+                    coordNodes = trackNode.findall(gx + 'coord')
+
+                    if len(whenNodes) != len(coordNodes):
+                        raise Exception('len(whenNodes) != len(coordNodes)')
+
+                    for whenNode,coordNode in zip(whenNodes,coordNodes):
+                        # lon,lat,alt
+                        trackpoints.append(coordNode.text.split())
+
+            else:
+                # get styleUrl
+                styleUrlNode = placemarknode.find(ns + 'styleUrl')
+
+                if styleUrlNode.text == '#start':
+                    # this is the 'start' node
+                    timeStampNode = placemarknode.find(ns + 'TimeStamp')
+                    timestamp = timeStampNode.find(ns + 'when').text
+
+                elif styleUrlNode.text == '#end':
+                    # this is the 'end' node
+                    print 'end'
+
+        return timestamp, properties, trackpoints
+        '''
