@@ -48,36 +48,47 @@
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Properties<b class="caret"></b></a>
             <div class="dropdown-menu">
             <table>
-                {{#if time}}
+                {{#if total_time}}
                 <tr>
                     <td>Total time</td>
-                    {{#with time}}
+                    {{#with total_time}}
                     <td>{{hours}}:{{minutes}}:{{seconds}}</td>
                     {{/with}}
                 </tr>
                 {{/if}}
-                {{#if dist}}
+
+                {{#if total_dist}}
                 <tr>
                     <td>Distance</td>
-                    <td>{{dist}} km</td>
+                    <td>{{total_dist}} km</td>
                 </tr>
                 {{/if}}
-                {{#if speed}}
+
+                {{#if mean_speed}}
                 <tr>
                     <td>&#216; Speed</td>
-                    <td>{{speed}} km/h</td>
+                    <td>{{mean_speed}} km/h</td>
                 </tr>
                 {{/if}}
-                {{#if cad}}
+
+                {{#if maximum_speed}}
+                <tr>
+                    <td>Max. Speed</td>
+                    <td>{{maximum_speed}} km/h</td>
+                </tr>
+                {{/if}}
+
+                {{#if mean_cad}}
                 <tr>
                     <td>&#216; Cadence</td>
-                    <td>{{cad}}</td>
+                    <td>{{mean_cad}}</td>
                 </tr>
                 {{/if}}
-                {{#if cal}}
+
+                {{#if maximum_cad}}
                 <tr>
-                    <td>Calories</td>
-                    <td>{{cal}}</td>
+                    <td>Max. Cadence</td>
+                    <td>{{maximum_cad}}</td>
                 </tr>
                 {{/if}}
             </table>

@@ -65,13 +65,16 @@ function displayProperties(properties) {
     var template = Handlebars.compile($("#properties-template").html());
 
     var html = template({
-        'time': {
-            'hours': Math.floor(properties.time/3600),
-            'minutes': Math.floor((properties.time%3600) / 60 ),
-            'seconds': Math.floor(properties.time%60)
+        'total_time': {
+            'hours': Math.floor(properties.total_time/3600),
+            'minutes': Math.floor((properties.total_time%3600) / 60 ),
+            'seconds': Math.floor(properties.total_time%60)
         },
-        'dist': Math.round(properties.dist) / 1000,
-        'speed': Math.round(properties.speed  * 1.609344 * 100) / 100
+        'total_dist': Math.round(properties.total_dist) / 1000,
+        'mean_speed': Math.round(properties.mean_speed * 360) / 100,
+        'maximum_speed': Math.round(properties.maximum_speed * 360) / 100,
+        'mean_cad': Math.round(properties.mean_cad * 100) / 100,
+        'maximum_cad': Math.round(properties.maximum_cad * 100) / 100
     });
 
     $('#properties').empty().append(html);
@@ -90,17 +93,26 @@ function displayProfiles(trackpoints) {
 
     trackpoints_t = d3.transpose(trackpoints);
 
-    var x  = d3.scale.linear().domain([d3.min(trackpoints_t[2]), d3.max(trackpoints_t[2])]).range([0, w]);
-    var y1 = d3.scale.linear().domain([d3.min(trackpoints_t[3]), d3.max(trackpoints_t[3])]).range([h, 0]);
-    var y2 = d3.scale.linear().domain([d3.min(trackpoints_t[4]), d3.max(trackpoints_t[4])]).range([h, 0]);
+    var x  = d3.scale.linear().domain([
+        d3.min(trackpoints_t[4]) * 0.001,
+        d3.max(trackpoints_t[4]) * 0.001
+    ]).range([0, w]);
+    var y1 = d3.scale.linear().domain([
+        d3.min(trackpoints_t[2]),
+        d3.max(trackpoints_t[2])
+    ]).range([h, 0]);
+    var y2 = d3.scale.linear().domain([
+        d3.min(trackpoints_t[5]) * 3.6,
+        d3.max(trackpoints_t[5]) * 3.6
+    ]).range([h, 0]);
 
     var line1 = d3.svg.line()
-        .x(function(d) {return x(d[2]);})
-        .y(function(d) {return y1(d[3]);});
+        .x(function(d) {return x(d[4] * 0.001);})
+        .y(function(d) {return y1(d[2]);});
 
     var line2 = d3.svg.line()
-        .x(function(d) {return x(d[2]);})
-        .y(function(d) {return y2(d[4]);});
+        .x(function(d) {return x(d[4] * 0.001);})
+        .y(function(d) {return y2(d[5] * 3.6);});
 
     var graph = d3.select("#profiles-canvas").append("svg:svg")
         .attr("width", w + m[1] + m[3])

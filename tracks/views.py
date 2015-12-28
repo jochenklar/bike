@@ -5,10 +5,11 @@ from django.shortcuts import get_object_or_404
 
 from tracks.models import Track
 
+
 def tracks(request):
     response = []
     for year in Track.objects.order_by('timestamp').datetimes('timestamp', 'year'):
-        queryset = Track.objects.filter(timestamp__year = year.year).order_by('timestamp')
+        queryset = Track.objects.filter(timestamp__year=year.year).order_by('timestamp')
 
         tracks = [{
             'id': element.pk,
@@ -24,6 +25,7 @@ def tracks(request):
 
     return HttpResponse(json.dumps(response), content_type="application/json")
 
+
 def track(request, pk):
     track = get_object_or_404(Track, pk=pk)
-    return HttpResponse(track.fetchGeojson(), content_type="application/json")
+    return HttpResponse(track.geojson.geojson, content_type="application/json")
