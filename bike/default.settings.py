@@ -36,14 +36,6 @@ ROOT_URLCONF = 'bike.urls'
 WSGI_APPLICATION = 'bike.wsgi.application'
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'bike',
-    #     'USER': 'bike',
-    #     'PASSWORD': 'bike',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
-    # }
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': '/tmp/bike.db'

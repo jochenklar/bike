@@ -11,7 +11,7 @@ class Parser():
             self._parser = TCX(track)
         elif suffix == '.kml':
             self._parser = KML(track)
-        elif suffix == '.kmz': 
+        elif suffix == '.kmz':
             self._parser = KMZ(track)
         else:
             raise Exception('Unknown format')
@@ -21,7 +21,7 @@ class Parser():
 
         geojson = json.dumps({
             "type": "Feature",
-            "geometry": { 
+            "geometry": {
                 "type": "MultiLineString",
                 "coordinates": [trackpoints]
             },
@@ -92,7 +92,7 @@ class TCX():
                         if (latNode is not None) and (lonNode is not None):
                             trackpoint['lon'] = float(lonNode.text)
                             trackpoint['lat'] = float(latNode.text)
-                    
+
                     altNode = tpNode.find(ns + 'AltitudeMeters')
                     if altNode is not None:
                         trackpoint['alt'] = float(altNode.text)
@@ -100,13 +100,13 @@ class TCX():
                     distNode = tpNode.find(ns + 'DistanceMeters')
                     if distNode is not None:
                         trackpoint['dist'] = float(distNode.text)
-                    
+
                     cadNode = tpNode.find(ns + 'Cadence')
                     if cadNode is not None:
                         trackpoint['cad'] = float(cadNode.text)
 
                     # append trackpoint to track if lat AND lon exist
-                    if trackpoint['lat'] and trackpoint['lon']:            
+                    if trackpoint['lat'] and trackpoint['lon']:
                         trackpoints.append([trackpoint[key] for key in ['lon','lat','dist','alt','cad']])
 
         return timestamp, properties, trackpoints
@@ -149,7 +149,7 @@ class KML():
 
                     if len(whenNodes) != len(coordNodes):
                         raise Exception('len(whenNodes) != len(coordNodes)')
-                    
+
                     for whenNode,coordNode in zip(whenNodes,coordNodes):
                         # lon,lat,alt
                         trackpoints.append(coordNode.text.split())

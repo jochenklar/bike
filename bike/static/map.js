@@ -16,10 +16,10 @@ function init() {
 }
 
 function displayMap() {
-    var url = 'http://tiles.codefor.de/static/bbs/germany/{z}/{x}/{y}.png';
+    var url = 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png';
     var opt = {
-        'attribution': 'Map data © 2012 OpenStreetMap contributors | Style by <a href="http://buergerbautstadt.de" target="blank">buergerbautstadt.de</a>',
-        'maxZoom': 14,
+        'attribution': 'Maps © <a href="http://www.thunderforest.com">Thunderforest</a>, Data © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        'maxZoom': 18,
         'minZoom': 6
     };
 
