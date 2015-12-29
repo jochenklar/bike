@@ -11,5 +11,6 @@ class Command(BaseCommand):
         tracks = Track.objects.all()
 
         for track in tracks:
+            print track
             track.save()
 
