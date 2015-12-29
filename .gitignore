@@ -2,7 +2,7 @@
 *~
 *.pyc
 
-/bike/settings.py
+/bike/local.py
 /media_root/
 /static_root/
 
