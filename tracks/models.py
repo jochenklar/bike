@@ -6,10 +6,10 @@ from tracks.utils import convert_tcx, convert_gpx
 
 
 class Track(models.Model):
-    name      = models.CharField(max_length=256, blank=True)
-    track     = models.FileField(upload_to='tracks')
+    name = models.CharField(max_length=256, blank=True)
+    track = models.FileField(upload_to='tracks')
     timestamp = models.DateTimeField()
-    geojson   = models.ForeignKey('GeoJson',null=True)
+    geojson = models.ForeignKey('GeoJson', null=True)
 
     def __unicode__(self):
         if self.name != '':
