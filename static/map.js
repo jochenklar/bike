@@ -41,8 +41,19 @@ function displayTrack(id) {
         url: '/tracks/' + id,
         dataType: 'json',
         success: function (json) {
+            if (json.type === 'FeatureCollection') {
+                json = json.features[0];
+            }
+
+            var trackpoints;
+            if (json.geometry.type === 'MultiLineString') {
+                trackpoints = json.geometry.coordinates[0];
+            } else {
+                trackpoints = json.geometry.coordinates;
+            }
+
             displayProperties(json.properties);
-            displayProfiles(json.geometry.coordinates[0]);
+            displayProfiles(trackpoints);
 
             // display track on leaflet map
             if (typeof _currentTrack !== 'undefined') {
@@ -56,87 +67,114 @@ function displayTrack(id) {
                 }
             }).addTo(_leafletMap);
 
-            _leafletMap.panTo(new L.LatLng(json.geometry.coordinates[0][0][1],json.geometry.coordinates[0][0][0]));
+            _leafletMap.panTo(new L.LatLng(trackpoints[0][1], trackpoints[0][0]));
         }
     });
 }
 
 function displayProperties(properties) {
-    var template = Handlebars.compile($("#properties-template").html());
+    $('#properties').empty();
 
-    var html = template({
-        'total_time': {
-            'hours': Math.floor(properties.total_time/3600),
-            'minutes': Math.floor((properties.total_time%3600) / 60 ),
-            'seconds': Math.floor(properties.total_time%60)
-        },
-        'total_dist': Math.round(properties.total_dist) / 1000,
-        'mean_speed': Math.round(properties.mean_speed * 360) / 100,
-        'maximum_speed': Math.round(properties.maximum_speed * 360) / 100,
-        'mean_cad': Math.round(properties.mean_cad * 100) / 100,
-        'maximum_cad': Math.round(properties.maximum_cad * 100) / 100
-    });
+    var template_config = {};
 
-    $('#properties').empty().append(html);
+    if (typeof properties != 'undefined') {
+        if (typeof properties.total_time != 'undefined') {
+            template_config.total_time = {
+                'hours': Math.floor(properties.total_time/3600),
+                'minutes': Math.floor((properties.total_time%3600) / 60 ),
+                'seconds': Math.floor(properties.total_time%60)
+            };
+        }
+
+        if (typeof properties.total_time != 'undefined') {
+            template_config.total_dist = Math.round(properties.total_dist) / 1000;
+        }
+
+        if (typeof properties.total_time != 'undefined') {
+            template_config.mean_speed = Math.round(properties.mean_speed * 360) / 100;
+        }
+
+        if (typeof properties.total_time != 'undefined') {
+            template_config.maximum_speed = Math.round(properties.maximum_speed * 360) / 100;
+        }
+
+        if (typeof properties.total_time != 'undefined') {
+            template_config.mean_cad = Math.round(properties.mean_cad * 100) / 100;
+        }
+
+        if (typeof properties.total_time != 'undefined') {
+            template_config.maximum_cad = Math.round(properties.maximum_cad * 100) / 100;
+        }
+    }
+
+    if (!$.isEmptyObject(template_config)) {
+        var template = Handlebars.compile($("#properties-template").html());
+        var html = template(template_config);
+        $('#properties').append(html);
+    }
 }
 
 function displayProfiles(trackpoints) {
-    var template = Handlebars.compile($("#profiles-template").html());
+    $('#profiles').empty();
 
-    var html = template();
+    if (trackpoints[0].length > 2) {
+        var template = Handlebars.compile($("#profiles-template").html());
 
-    $('#profiles').empty().append(html);
+        var html = template();
 
-    var m = [20, 80, 20, 80]; // margins
-    var w = 800 - m[1] - m[3]; // width
-    var h = 400 - m[0] - m[2]; // height
+        $('#profiles').append(html);
 
-    trackpoints_t = d3.transpose(trackpoints);
+        var m = [20, 80, 20, 80]; // margins
+        var w = 800 - m[1] - m[3]; // width
+        var h = 400 - m[0] - m[2]; // height
 
-    var x  = d3.scale.linear().domain([
-        d3.min(trackpoints_t[4]) * 0.001,
-        d3.max(trackpoints_t[4]) * 0.001
-    ]).range([0, w]);
-    var y1 = d3.scale.linear().domain([
-        d3.min(trackpoints_t[2]),
-        d3.max(trackpoints_t[2])
-    ]).range([h, 0]);
-    var y2 = d3.scale.linear().domain([
-        d3.min(trackpoints_t[5]) * 3.6,
-        d3.max(trackpoints_t[5]) * 3.6
-    ]).range([h, 0]);
+        trackpoints_t = d3.transpose(trackpoints);
 
-    var line1 = d3.svg.line()
-        .x(function(d) {return x(d[4] * 0.001);})
-        .y(function(d) {return y1(d[2]);});
+        var x  = d3.scale.linear().domain([
+            d3.min(trackpoints_t[4]) * 0.001,
+            d3.max(trackpoints_t[4]) * 0.001
+        ]).range([0, w]);
+        var y1 = d3.scale.linear().domain([
+            d3.min(trackpoints_t[2]),
+            d3.max(trackpoints_t[2])
+        ]).range([h, 0]);
+        var y2 = d3.scale.linear().domain([
+            d3.min(trackpoints_t[5]) * 3.6,
+            d3.max(trackpoints_t[5]) * 3.6
+        ]).range([h, 0]);
 
-    var line2 = d3.svg.line()
-        .x(function(d) {return x(d[4] * 0.001);})
-        .y(function(d) {return y2(d[5] * 3.6);});
+        var line1 = d3.svg.line()
+            .x(function(d) {return x(d[4] * 0.001);})
+            .y(function(d) {return y1(d[2]);});
 
-    var graph = d3.select("#profiles-canvas").append("svg:svg")
-        .attr("width", w + m[1] + m[3])
-        .attr("height", h + m[0] + m[2])
-        .append("svg:g")
-            .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+        var line2 = d3.svg.line()
+            .x(function(d) {return x(d[4] * 0.001);})
+            .y(function(d) {return y2(d[5] * 3.6);});
 
-    var xAxis = d3.svg.axis().scale(x).ticks(10);
-    graph.append("svg:g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + h + ")")
-        .call(xAxis);
+        var graph = d3.select("#profiles-canvas").append("svg:svg")
+            .attr("width", w + m[1] + m[3])
+            .attr("height", h + m[0] + m[2])
+            .append("svg:g")
+                .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-    var yAxisLeft = d3.svg.axis().scale(y1).ticks(6).orient("left");
-    graph.append("svg:g")
-        .attr("class", "y axis axisLeft")
-        .call(yAxisLeft);
+        var xAxis = d3.svg.axis().scale(x).ticks(10);
+        graph.append("svg:g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + h + ")")
+            .call(xAxis);
 
-    var yAxisRight = d3.svg.axis().scale(y2).ticks(6).orient("right");
-    graph.append("svg:g")
-        .attr("class", "y axis axisRight")
-        .attr("transform", "translate(" + w + ",0)")
-        .call(yAxisRight);
+        var yAxisLeft = d3.svg.axis().scale(y1).ticks(6).orient("left");
+        graph.append("svg:g")
+            .attr("class", "y axis axisLeft")
+            .call(yAxisLeft);
 
-    graph.append("svg:path").attr("d", line1(trackpoints)).attr("class", "y1");
-    graph.append("svg:path").attr("d", line2(trackpoints)).attr("class", "y2");
+        var yAxisRight = d3.svg.axis().scale(y2).ticks(6).orient("right");
+        graph.append("svg:g")
+            .attr("class", "y axis axisRight")
+            .attr("transform", "translate(" + w + ",0)")
+            .call(yAxisRight);
+
+        graph.append("svg:path").attr("d", line1(trackpoints)).attr("class", "y1");
+        graph.append("svg:path").attr("d", line2(trackpoints)).attr("class", "y2");
+    }
 }

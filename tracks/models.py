@@ -1,6 +1,7 @@
 import os
 
 from django.db import models
+from django.utils.timezone import now
 
 from tracks.utils import convert_tcx, convert_gpx
 
@@ -8,7 +9,7 @@ from tracks.utils import convert_tcx, convert_gpx
 class Track(models.Model):
     name = models.CharField(max_length=256, blank=True)
     track = models.FileField(upload_to='tracks')
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(default=now, blank=True)
     geojson = models.ForeignKey('GeoJson', null=True)
 
     def __unicode__(self):
@@ -21,7 +22,9 @@ class Track(models.Model):
         suffix = os.path.splitext(self.track.path)[1]
         track_string = self.track.read()
 
-        if suffix == '.tcx':
+        if suffix in ['.json', '.geojson']:
+            timestamp, geojson = None, track_string
+        elif suffix == '.tcx':
             timestamp, geojson = convert_tcx(track_string)
         elif suffix == '.gpx':
             timestamp, geojson = convert_gpx(track_string)
@@ -37,7 +40,9 @@ class Track(models.Model):
             self.geojson.save()
 
         # save track object
-        self.timestamp = timestamp
+        if timestamp:
+            self.timestamp = timestamp
+
         super(Track, self).save(*args, **kwargs)
 
 
