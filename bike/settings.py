@@ -83,7 +83,7 @@ STATICFILES_DIRS = (
 
 LOGIN_URL = '/'
 
-TILES_URL = 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png'
+TILES_URL = 'https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png'
 TILES_OPT = {
     'attribution': 'Map tiles by <a href="http://www.thunderforest.com">Thunderforest</a>. Map data by <a href="http://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
     'maxZoom': 18,
