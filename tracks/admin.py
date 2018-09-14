@@ -1,8 +1,12 @@
 from django.contrib import admin
-from tracks.models import Track
+
+from .models import Track
 
 
 class TrackAdmin(admin.ModelAdmin):
-    fields = ('name', 'track', 'timestamp')
+    search_fields = ['name']
+    list_display = ['name', 'start_time', 'end_time', 'distance']
+    ordering = ['-start_time']
+
 
 admin.site.register(Track, TrackAdmin)

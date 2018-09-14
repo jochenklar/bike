@@ -1,0 +1,54 @@
+{% extends 'tracks/base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+
+<div id="app">
+
+    <bike-nav inline-template>
+        <nav class="navbar">
+            <ul class="nav-left">
+                <li class="nav-item">
+                    <a class="nav-brand" href="">bike.jochenklar.de</a>
+                </li>
+
+                <li class="nav-item" v-for="item in tracks">
+                    <a href="#" v-on:click="open(item.year)">
+                        {$ item.year $}
+                    </a>
+                    <ul class="dropdown" v-if="active == item.year">
+                        <li v-for="track in item.tracks">
+                            <a href="#" v-on:click="fetchTrack(track.id); close();">{$ track.name $}</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <ul class="nav-right">
+            <li>
+                <a href="{% url 'admin:index' %}">Admin</a>
+            </li>
+        </ul>
+    </bike-nav>
+
+    <bike-map
+        url="https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=af0639a39e5840339e2a6ebb563f4cde"
+        attribution="Map tiles by <a href=&#34;http://www.thunderforest.com&#34;>Thunderforest</a>. Map data by <a href=&#34;http://www.openstreetmap.org/copyright&#34;>OpenStreetMap contributors</a>"
+        min-zoom="5"
+        max-zoom="20"
+        v-bind:track="track"
+        v-bind:focus="focus">
+    </bike-map>
+
+    <bike-profile
+        v-bind:track="track"
+        v-on:hover="focus = $event">
+    </bike-profile>
+
+</div>
+
+{% endblock %}

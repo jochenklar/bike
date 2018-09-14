@@ -1,8 +1,10 @@
-from django.conf.urls import patterns, include, url
+from django.urls import path
 
-from tracks import views
+from .views import home, tracks, track
+
 
 urlpatterns = [
-    url(r'^$', views.tracks),
-    url(r'^(?P<pk>\d+)$', views.track)
+    path('', home),
+    path('tracks/', tracks),
+    path('tracks/<int:pk>/', track)
 ]

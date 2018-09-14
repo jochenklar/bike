@@ -1,4 +1,7 @@
-Django==1.9
-gpxpy
-lxml
-psycopg2
+Django>=2.0
+
+django-libsass
+django-vendor-files
+
+psycopg2-binary
+geopy

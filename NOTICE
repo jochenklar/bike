@@ -5,7 +5,7 @@ THIS NOTICE APPLIES TO ALL FILES CONTAINED IN THIS AND UNDERLYING FOLDERS
 	bike
 	Copyright 2013 Jochen S. Klar
 
-This code contains code derived from several other projects, which are distibuted 
+This code contains code derived from several other projects, which are distibuted
 under the following licenses:
 
 django <https://www.djangoproject.com/>
@@ -17,10 +17,10 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-    1. Redistributions of source code must retain the above copyright notice, 
+    1. Redistributions of source code must retain the above copyright notice,
        this list of conditions and the following disclaimer.
-    
-    2. Redistributions in binary form must reproduce the above copyright 
+
+    2. Redistributions in binary form must reproduce the above copyright
        notice, this list of conditions and the following disclaimer in the
        documentation and/or other materials provided with the distribution.
 
@@ -71,15 +71,15 @@ Twitter bootstrap <http://twitter.github.io/bootstrap/>
 
 Copyright 2012 Twitter, Inc.
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use 
-this work except in compliance with the License. You may obtain a copy of the 
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this work except in compliance with the License. You may obtain a copy of the
 License in the LICENSE file, or at:
 
 http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed 
-under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
-CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
 Droid fonts <http://twitter.github.io/bootstrap/>

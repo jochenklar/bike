@@ -1,0 +1,42 @@
+{% load staticfiles %}
+{% load vendor_tags %}
+{% load compress %}
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>{{ request.site.name }}</title>
+
+        <meta charset="UTF-8" />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+        {% vendor 'vue' %}
+        {% vendor 'leaflet' %}
+        {% vendor 'Chart' %}
+        {% vendor 'vue-chartjs' %}
+
+        {% compress css %}
+            <link rel="stylesheet" type="text/x-scss" href="{% static 'tracks/style.scss' %}" />
+        {% endcompress %}
+
+        {% compress js %}
+            <script type="text/javascript" src="{% static 'tracks/store.js' %}"></script>
+
+            <script type="text/javascript" src="{% static 'tracks/components/nav.js' %}"></script>
+            <script type="text/javascript" src="{% static 'tracks/components/map.js' %}"></script>
+            <script type="text/javascript" src="{% static 'tracks/components/chart.js' %}"></script>
+
+            <script type="text/javascript" src="{% static 'tracks/app.js' %}"></script>
+        {% endcompress %}
+
+    </head>
+
+    <body>
+
+        <!-- content -->
+        {% block content %}{% endblock %}
+        <!-- end content -->
+
+    </body>
+</html>

@@ -1,0 +1,109 @@
+$nav-color: #333;
+$nav-background-color: #eeeeef;
+$nav-hover-background-color: #eeeeef;
+$nav-dropdown-background-color: white;
+
+$chart-height: 200px;
+$chart-background-color: #eeeeef;
+
+$border: 1px solid silver;
+
+
+@font-face {
+    font-family: DroidSans;
+    src: url('font/DroidSans.ttf');
+}
+@font-face {
+    font-family: DroidSans;
+    src: url('font/DroidSans-Bold.ttf');
+    font-weight: bold;
+}
+html, body {
+    padding: 0;
+    margin: 0;
+    font-family: DroidSans;
+}
+
+nav {
+    height: 50px;
+    color: $nav-color;
+    background-color: $nav-background-color;
+
+    a {
+        color: $nav-color;
+
+        text-decoration: none;
+        display: inline-block;
+        padding: 15px;
+        line-height: 20px;
+
+        &:hover {
+            background-color: $nav-hover-background-color;
+        }
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+
+        li.nav-item {
+            float: left;
+        }
+
+        &.nav-left {
+            float: left;
+        }
+        &.nav-right {
+            float: right;
+        }
+
+        ul.dropdown {
+            position: absolute;
+            z-index: 10000;
+            max-height: 80%;
+            overflow-y: auto;
+
+            background-color: $nav-dropdown-background-color;
+
+            font-size: small;
+
+            border-right: $border;
+            border-bottom: $border;
+            border-left: $border;
+
+            padding-bottom: 2px;
+
+            a {
+                display: block;
+                padding: 2px 15px;
+            }
+        }
+    }
+
+    li {
+        list-style: none;
+        margin: 0;
+    }
+}
+
+.map {
+    position: absolute;
+    top: 50px;
+    bottom: $chart-height;
+    left: 0;
+    right: 0;
+
+    border-top: $border;
+    border-bottom: $border;
+}
+
+.chart {
+    position: absolute;
+    width: 100%;
+    height: $chart-height;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background-color: $chart-background-color;
+}
