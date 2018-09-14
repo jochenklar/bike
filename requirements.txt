@@ -5,3 +5,5 @@ django-vendor-files
 
 psycopg2-binary
 geopy
+
+gunicorn
